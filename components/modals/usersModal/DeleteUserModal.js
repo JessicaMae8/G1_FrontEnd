@@ -2,7 +2,23 @@
 
 import React from 'react';
 
-export default function DeleteUserModal({ onClose, onDelete }) {
+export default function DeleteUserModal({ userId, onClose, onDeleteSuccess }) {
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(`/api/users/${userId}`, {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        onDeleteSuccess();
+        onClose();
+      } else {
+        console.error('Failed to delete user');
+      }
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 pointer-events-auto">
       <div className="bg-white rounded-lg p-6 max-w-md w-full">
@@ -16,12 +32,7 @@ export default function DeleteUserModal({ onClose, onDelete }) {
             Cancel
           </button>
           <button
-            onClick={() => {
-              if (typeof onDelete === 'function') {
-                onDelete();
-              }
-              onClose();
-            }}
+            onClick={handleDelete}
             className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
           >
             Delete
