@@ -6,10 +6,9 @@ const AddModal = ({ isOpen, onClose, onSave }) => {
   const [formData, setFormData] = useState({
     title: '',
     author: '',
-    category: '',
-    published: '',
-    status: 'Available',
-    image: '',
+    isbn: '',
+    published_year: '',
+    copies_available: '',
   });
 
   if (!isOpen) return null;
@@ -29,10 +28,9 @@ const AddModal = ({ isOpen, onClose, onSave }) => {
     setFormData({
       title: '',
       author: '',
-      category: '',
-      published: '',
-      status: 'Available',
-      image: '',
+      isbn: '',
+      published_year: '',
+      copies_available: '',
     });
   };
 
@@ -64,45 +62,35 @@ const AddModal = ({ isOpen, onClose, onSave }) => {
             />
           </div>
           <div>
-            <label className="block mb-1">Category</label>
+            <label className="block mb-1">ISBN</label>
             <input
               type="text"
-              name="category"
-              value={formData.category}
+              name="isbn"
+              value={formData.isbn}
               onChange={handleChange}
+              required
               className="w-full px-3 py-2 rounded bg-gray-700 text-white focus:outline-none"
             />
           </div>
           <div>
-            <label className="block mb-1">Published</label>
+            <label className="block mb-1">Published Year</label>
             <input
-              type="text"
-              name="published"
-              value={formData.published}
+              type="number"
+              name="published_year"
+              value={formData.published_year}
               onChange={handleChange}
+              required
               className="w-full px-3 py-2 rounded bg-gray-700 text-white focus:outline-none"
             />
           </div>
           <div>
-            <label className="block mb-1">Status</label>
-            <select
-              name="status"
-              value={formData.status}
-              onChange={handleChange}
-              className="w-full px-3 py-2 rounded bg-gray-700 text-white focus:outline-none"
-            >
-              <option value="Available">Available</option>
-              <option value="Issued">Issued</option>
-              <option value="Reserved">Reserved</option>
-            </select>
-          </div>
-          <div>
-            <label className="block mb-1">Image URL</label>
+            <label className="block mb-1">Copies Available</label>
             <input
-              type="text"
-              name="image"
-              value={formData.image}
+              type="number"
+              name="copies_available"
+              value={formData.copies_available}
               onChange={handleChange}
+              required
               className="w-full px-3 py-2 rounded bg-gray-700 text-white focus:outline-none"
             />
           </div>
