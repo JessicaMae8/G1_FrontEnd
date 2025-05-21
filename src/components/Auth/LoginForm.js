@@ -1,22 +1,58 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const LoginForm = ({ onSwitchToRegister }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  const handleSubmit = (e) => {
+  const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+
+  const getCsrfCookie = async () => {
+    await fetch(`${backendBaseUrl}/sanctum/csrf-cookie`, {
+      method: 'GET',
+      credentials: 'include',
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    // Basic frontend validation
     if (!email || !password) {
       setError('Please fill in all fields.');
       return;
     }
-    // TODO: Integrate with backend API for authentication
-    alert(`Logging in with email: ${email}`);
+    setLoading(true);
+    try {
+      // Get CSRF cookie first
+      await getCsrfCookie();
+
+      // Then send login request
+      const response = await fetch(`${backendBaseUrl}/api/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        credentials: 'include', // important for Sanctum cookie
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        setError(data.message || 'Login failed');
+      } else {
+        // Redirect to user dashboard on successful login
+        router.push('/user/dashboard');
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -48,9 +84,10 @@ const LoginForm = ({ onSwitchToRegister }) => {
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded text-white font-semibold"
+          disabled={loading}
+          className="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded text-white font-semibold disabled:opacity-50"
         >
-          Login
+          {loading ? 'Logging in...' : 'Login'}
         </button>
       </form>
       <p className="mt-4 text-center">
