@@ -8,7 +8,7 @@ export default function SidebarUser({ user }) {
     <div className="flex h-screen bg-gray-900 text-yellow-300 flex-col w-64 p-6">
       <div className="flex items-center mb-6">
         <Image
-          src="/img/user-profile.jpg"
+          src="/img/habal.jpg"
           alt="User Avatar"
           width={40}
           height={40}
