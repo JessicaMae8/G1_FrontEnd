@@ -6,9 +6,10 @@ const EditModal = ({ isOpen, book, onClose, onSave }) => {
   const [formData, setFormData] = useState({
     title: '',
     author: '',
-    isbn: '',
-    published_year: '',
-    copies_available: '',
+    category: '',
+    published: '',
+    status: '',
+    image: '',
   });
 
   useEffect(() => {
@@ -16,9 +17,10 @@ const EditModal = ({ isOpen, book, onClose, onSave }) => {
       setFormData({
         title: book.title || '',
         author: book.author || '',
-        isbn: book.isbn || '',
-        published_year: book.published_year || '',
-        copies_available: book.copies_available || '',
+        category: book.category || '',
+        published: book.published || '',
+        status: book.status || '',
+        image: book.image || '',
       });
     }
   }, [book]);
@@ -36,12 +38,11 @@ const EditModal = ({ isOpen, book, onClose, onSave }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSave(formData);
-    onClose();
   };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-gray-900 p-6 rounded-lg w-96 text-white">
+      <div className="bg-gray-900 p-6 rounded-lg w-full max-w-md text-white">
         <h2 className="text-xl font-semibold mb-4">Edit Book</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -51,8 +52,8 @@ const EditModal = ({ isOpen, book, onClose, onSave }) => {
               name="title"
               value={formData.title}
               onChange={handleChange}
+              className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-600 text-white"
               required
-              className="w-full px-3 py-2 rounded bg-gray-700 text-white focus:outline-none"
             />
           </div>
           <div>
@@ -62,48 +63,58 @@ const EditModal = ({ isOpen, book, onClose, onSave }) => {
               name="author"
               value={formData.author}
               onChange={handleChange}
+              className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-600 text-white"
               required
-              className="w-full px-3 py-2 rounded bg-gray-700 text-white focus:outline-none"
             />
           </div>
           <div>
-            <label className="block mb-1">ISBN</label>
+            <label className="block mb-1">Category</label>
             <input
               type="text"
-              name="isbn"
-              value={formData.isbn}
+              name="category"
+              value={formData.category}
               onChange={handleChange}
-              required
-              className="w-full px-3 py-2 rounded bg-gray-700 text-white focus:outline-none"
+              className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-600 text-white"
             />
           </div>
           <div>
-            <label className="block mb-1">Published Year</label>
+            <label className="block mb-1">Published</label>
             <input
-              type="number"
-              name="published_year"
-              value={formData.published_year}
+              type="text"
+              name="published"
+              value={formData.published}
               onChange={handleChange}
-              required
-              className="w-full px-3 py-2 rounded bg-gray-700 text-white focus:outline-none"
+              className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-600 text-white"
             />
           </div>
           <div>
-            <label className="block mb-1">Copies Available</label>
-            <input
-              type="number"
-              name="copies_available"
-              value={formData.copies_available}
+            <label className="block mb-1">Status</label>
+            <select
+              name="status"
+              value={formData.status}
               onChange={handleChange}
-              required
-              className="w-full px-3 py-2 rounded bg-gray-700 text-white focus:outline-none"
+              className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-600 text-white"
+            >
+              <option value="Available">Available</option>
+              <option value="Issued">Issued</option>
+              <option value="Reserved">Reserved</option>
+            </select>
+          </div>
+          <div>
+            <label className="block mb-1">Image URL</label>
+            <input
+              type="text"
+              name="image"
+              value={formData.image}
+              onChange={handleChange}
+              className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-600 text-white"
             />
           </div>
-          <div className="flex justify-end gap-4 mt-4">
+          <div className="flex justify-end gap-4 mt-6">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-gray-600 rounded hover:bg-gray-700"
+              className="px-4 py-2 bg-gray-700 rounded hover:bg-gray-600"
             >
               Cancel
             </button>
@@ -111,7 +122,7 @@ const EditModal = ({ isOpen, book, onClose, onSave }) => {
               type="submit"
               className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700"
             >
-              Save Changes
+              Save
             </button>
           </div>
         </form>
