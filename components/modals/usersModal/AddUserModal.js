@@ -1,27 +1,38 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function AddUserModal({ onClose, onSave }) {
+  const [error, setError] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const password = formData.get('password');
+    const confirmPassword = formData.get('confirmPassword');
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    setError(''); // Clear error if passwords match
+
+    const user = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      password: password,
+      // Add other fields if needed
+    };
+    onSave(user);
+    onClose();
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 max-w-md w-full">
         <h2 className="text-xl font-bold mb-4">Add User</h2>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            // Collect form data and call onSave
-            const formData = new FormData(e.target);
-            const user = {
-              name: formData.get('name'),
-              email: formData.get('email'),
-              password: formData.get('password'),
-              // Add other fields as needed
-            };
-            onSave(user);
-            onClose();
-          }}
-        >
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-700 font-bold mb-2" htmlFor="name">
               Name
@@ -58,7 +69,25 @@ export default function AddUserModal({ onClose, onSave }) {
               className="w-full px-3 py-2 border rounded"
             />
           </div>
-          {/* Add more fields as needed */}
+          <div className="mb-4">
+            <label className="block text-gray-700 font-bold mb-2" htmlFor="confirmPassword">
+              Confirm Password
+            </label>
+            <input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              required
+              className="w-full px-3 py-2 border rounded"
+            />
+          </div>
+
+          {error && (
+            <div className="mb-4 text-red-600 font-semibold">
+              {error}
+            </div>
+          )}
+
           <div className="flex justify-end space-x-4">
             <button
               type="button"
