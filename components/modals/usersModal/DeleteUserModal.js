@@ -1,44 +1,30 @@
-'use client';
-
 import React from 'react';
 
-export default function DeleteUserModal({ userId, onClose, onDeleteSuccess }) {
-  const handleDelete = async () => {
-    try {
-      const response = await fetch(`/api/users/${userId}`, {
-        method: 'DELETE',
-      });
-      if (response.ok) {
-        onDeleteSuccess();
-        onClose();
-      } else {
-        console.error('Failed to delete user');
-      }
-    } catch (error) {
-      console.error('Error deleting user:', error);
-    }
-  };
+const DeleteUserModal = ({ isOpen, onClose, onDelete, user }) => {
+    if (!isOpen || !user) return null;
 
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 pointer-events-auto">
-      <div className="bg-white rounded-lg p-6 max-w-md w-full">
-        <h2 className="text-xl font-bold mb-4">Delete User</h2>
-        <p>Are you sure you want to delete this user?</p>
-        <div className="mt-6 flex justify-end space-x-4">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleDelete}
-            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-          >
-            Delete
-          </button>
+    return (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 w-full max-w-md text-black">
+                <h2 className="text-xl font-semibold mb-4 text-center text-red-600">Delete User</h2>
+                <p className="mb-6 text-center">
+                    Are you sure you want to remove <span className="font-bold">{user.name}</span>?
+                </p>
+                <div className="flex justify-center gap-4">
+                    <button onClick={onClose} className="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+                    <button
+                        onClick={() => {
+                            onDelete(user.id);
+                            onClose();
+                        }}
+                        className="px-4 py-2 bg-red-600 text-white rounded"
+                    >
+                        Delete
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
-}
+    );
+};
+
+export default DeleteUserModal;
