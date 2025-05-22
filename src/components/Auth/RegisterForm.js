@@ -8,8 +8,11 @@ const RegisterForm = ({ onSwitchToLogin }) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     if (!name || !email || !password || !confirmPassword) {
@@ -20,8 +23,49 @@ const RegisterForm = ({ onSwitchToLogin }) => {
       setError('Passwords do not match.');
       return;
     }
-    // TODO: Integrate with backend API for registration
-    alert(`Registering user: ${name} with email: ${email}`);
+    setLoading(true);
+    try {
+      const response = await fetch(`${backendBaseUrl}/api/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({ name, email, password, password_confirmation: confirmPassword }),
+      });
+
+      if (!response.ok) {
+        let data;
+        try {
+          data = await response.clone().json();
+        } catch (jsonErr) {
+          console.error('Failed to parse JSON response:', jsonErr);
+          data = null;
+        }
+
+        if (data && Object.keys(data).length > 0) {
+          console.error('Registration error response:', data);
+          if (data.errors) {
+            const messages = Object.values(data.errors).flat().join(' ');
+            setError(messages);
+          } else {
+            setError(data.message || 'Registration failed');
+          }
+        } else {
+          const text = await response.text();
+          console.error('Registration error response text:', text);
+          setError('Registration failed with unknown error.');
+        }
+      } else {
+        alert('Registration successful. Please login.');
+        onSwitchToLogin();
+      }
+    } catch (err) {
+      console.error('Registration fetch error:', err);
+      setError('An error occurred. Please check if the backend server is running and accessible.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -75,9 +119,10 @@ const RegisterForm = ({ onSwitchToLogin }) => {
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded text-white font-semibold"
+          disabled={loading}
+          className="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded text-white font-semibold disabled:opacity-50"
         >
-          Register
+          {loading ? 'Registering...' : 'Register'}
         </button>
       </form>
       <p className="mt-4 text-center">

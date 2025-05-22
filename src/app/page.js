@@ -46,7 +46,7 @@ Browse it. Borrow it. Read it. Our Library puts your entire collection at your f
 
            <div className="flex flex-col sm:flex-col gap-2 sm:gap-4 rounded-sm pr-10 pl-10 pt-2 pb-2 font-Semibold">
              <Link href="/admin" className="underline hover:text-yellow-500">Admin Panel Test ➤</Link>
-             <Link href="/library" className="underline hover:text-yellow-500">Library for Users Test ➤</Link>
+             <Link href="/user/dashboard" className="underline hover:text-yellow-500">Library for Users Test ➤</Link>
            </div>
          </div>
        </div>
