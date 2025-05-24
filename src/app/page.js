@@ -13,11 +13,15 @@ export default function Home() {
     setShowAuthModal(false);
   };
 
+  const handleLoginSuccess = () => {
+    setShowAuthModal(false);
+    // Additional actions on login success can be added here
+  };
+
   return (
     <>
       <Navbar />
-      {/* Render the AuthModal if showAuthModal is true */}
-      {showAuthModal && <AuthModal onClose={handleCloseAuthModal} />}
+      {showAuthModal && <AuthModal onClose={handleCloseAuthModal} onLoginSuccess={handleLoginSuccess} />}
 
       {/* HOME */}
       <section id="home">
@@ -84,9 +88,7 @@ export default function Home() {
       <section
         id="services"
         className="relative bg-cover bg-center bg-no-repeat text-white py-24 px-6"
-        style={{
-          backgroundImage: "url('/img/group.jpg')",
-        }}
+        style={{ backgroundImage: "url('/img/group.jpg')" }}
       >
         <div className="absolute inset-0 bg-black bg-opacity-45"></div>
 
@@ -147,9 +149,7 @@ export default function Home() {
 
       {/* CONTACT */}
       <section id="contact" className="min-h-screen w-full text-white py-16 px-4 pt-40"
-        style={{
-          backgroundImage: "url('/img/group.jpg')",
-        }}>
+        style={{ backgroundImage: "url('/img/group.jpg')" }}>
         <div className="max-w-6xl mx-auto bg-white bg-opacity-10 backdrop-blur-md border border-white border-opacity-20 rounded-xl p-10 shadow-lg">
           <div className="flex flex-col md:flex-row gap-10">
             <div className="md:w-1/2 space-y-8">
@@ -212,7 +212,7 @@ export default function Home() {
       <footer id="footer" className="bg-[#4B2E05] text-gray-300 py-16 px-6">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Columns for footer content */}
-          {/* (You already have this correctly, so I kept it as-is) */}
+          {/* You can add footer links or branding here */}
         </div>
       </footer>
     </>

@@ -1,24 +1,35 @@
 'use client';
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
-const AuthContext = createContext()
+const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null)
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const router = useRouter();
 
-  const login = (userData) => {
-    setUser(userData || { name: 'User' })
-  }
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsAuthenticated(!!token);
+  }, []);
+
+  const login = () => {
+    localStorage.setItem('token', 'dummy-token-for-auth');
+    setIsAuthenticated(true);
+    router.push('/user/dashboard');
+  };
 
   const logout = () => {
-    setUser(null)
-  }
+    localStorage.removeItem('token');
+    setIsAuthenticated(false);
+    router.push('/');
+  };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
       {children}
     </AuthContext.Provider>
-  )
-}
+  );
+};
 
-export const useAuth = () => useContext(AuthContext)
+export const useAuth = () => useContext(AuthContext);

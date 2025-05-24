@@ -6,7 +6,7 @@ import UserDashboardHome from 'components/UserLandingPage';
 export default function UserDashboardPage() {
   return (
     <div>
-      <UserDashboardHome />
+      <UserDashboardHome/>
     </div>
   );
 }
