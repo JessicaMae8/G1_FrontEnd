@@ -1,17 +1,53 @@
-import Image from 'next/image';
+'use client';
+
+import { useState } from 'react';
+
+const sampleData = [
+  { label: 'Jan', value: 40 },
+  { label: 'Feb', value: 55 },
+  { label: 'Mar', value: 75 },
+  { label: 'Apr', value: 60 },
+  { label: 'May', value: 80 },
+  { label: 'Jun', value: 70 },
+];
+
 export default function Page() {
-    return (
-        <div className="flex flex-col items-center justify-center w-full pt-10 pr-20 bg-gray-950 text-white overflow-hidden">
-            <h1 className="text-7xl font-extrabold text-red-600 mb-4">404</h1>
-           <p className="text-2xl text-gray-400 mb-6">Page Not Found</p>
-            <Image
-                src="/img/error404.gif"
-                alt="Unauthorized GIF"
-                width={498} height={282}
-                className="w-[498px] h-[282px] object-contain mb-6"
-            />
-             
-            <p className="text-gray-500">this page isn&apos;t available right now</p>
-        </div>
-    );
+  const [data, setData] = useState(sampleData);
+
+  const maxValue = Math.max(...data.map(d => d.value));
+  const chartHeight = 200;
+
+  return (
+    <div className="min-h-screen bg-gray-950 text-white px-8 py-10 max-w-4xl mx-auto">
+      <h1 className="text-4xl font-bold mb-8 text-center">Admin Chart</h1>
+      <svg
+        width="100%"
+        height={chartHeight + 40}
+        viewBox={`0 0 ${data.length * 60} ${chartHeight + 40}`}
+        className="overflow-visible"
+      >
+        {/* Y axis lines and labels */}
+        {[0, 0.25, 0.5, 0.75, 1].map((t) => {
+          const y = chartHeight - t * chartHeight;
+          const value = Math.round(t * maxValue);
+          return (
+            <g key={t}>
+              <line x1="0" y1={y} x2={data.length * 60} y2={y} stroke="#444" strokeDasharray="4 2" />
+              <text x="-10" y={y + 5} fill="#888" fontSize="12" textAnchor="end">{value}</text>
+            </g>
+          );
+        })}
+        {/* Bars */}
+        {data.map((d, i) => {
+          const barHeight = (d.value / maxValue) * chartHeight;
+          return (
+            <g key={d.label} transform={`translate(${i * 60 + 30}, ${chartHeight - barHeight})`}>
+              <rect width="40" height={barHeight} fill="#ef4444" rx="4" />
+              <text y={barHeight + 15} fill="#ccc" fontSize="14" textAnchor="middle">{d.label}</text>
+            </g>
+          );
+        })}
+      </svg>
+    </div>
+  );
 }

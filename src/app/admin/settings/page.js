@@ -1,17 +1,68 @@
-import Image from 'next/image';
+'use client';
+
+import { useState } from 'react';
+
 export default function Page() {
-    return (
-        <div className="flex flex-col items-center justify-center w-full pt-10 pr-20 bg-gray-950 text-white overflow-hidden">
-            <h1 className="text-7xl font-extrabold text-red-600 mb-4">404</h1>
-           <p className="text-2xl text-gray-400 mb-6">Page Not Found</p>
-            <Image
-                src="/img/error404.gif"
-                alt="Unauthorized GIF"
-                width={498} height={282}
-                className="w-[498px] h-[282px] object-contain mb-6"
-            />
-             
-            <p className="text-gray-500">this page isn&apos;t available right now</p>
+  const [siteTitle, setSiteTitle] = useState('My Library');
+  const [adminEmail, setAdminEmail] = useState('admin@example.com');
+  const [enableNotifications, setEnableNotifications] = useState(true);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // For now, just log the settings to console
+    console.log({ siteTitle, adminEmail, enableNotifications });
+    alert('Settings saved (not really, this is a demo)');
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-950 text-white px-8 py-10 max-w-3xl mx-auto">
+      <h1 className="text-4xl font-bold mb-8 text-center">Admin Settings</h1>
+      <form onSubmit={handleSubmit} className="space-y-6 bg-gray-900 p-6 rounded-lg shadow-lg">
+        <div>
+          <label htmlFor="siteTitle" className="block text-gray-300 mb-2 font-semibold">
+            Site Title
+          </label>
+          <input
+            id="siteTitle"
+            type="text"
+            value={siteTitle}
+            onChange={(e) => setSiteTitle(e.target.value)}
+            className="w-full px-4 py-2 rounded bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-red-600"
+            required
+          />
         </div>
-    );
+        <div>
+          <label htmlFor="adminEmail" className="block text-gray-300 mb-2 font-semibold">
+            Admin Email
+          </label>
+          <input
+            id="adminEmail"
+            type="email"
+            value={adminEmail}
+            onChange={(e) => setAdminEmail(e.target.value)}
+            className="w-full px-4 py-2 rounded bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-red-600"
+            required
+          />
+        </div>
+        <div className="flex items-center space-x-3">
+          <input
+            id="enableNotifications"
+            type="checkbox"
+            checked={enableNotifications}
+            onChange={(e) => setEnableNotifications(e.target.checked)}
+            className="h-5 w-5 text-red-600 bg-gray-800 rounded focus:ring-red-500"
+          />
+          <label htmlFor="enableNotifications" className="text-gray-300 font-semibold">
+            Enable Notifications
+          </label>
+        </div>
+        <button
+          type="submit"
+          className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded transition"
+        >
+          Save Settings
+        </button>
+      </form>
+    </div>
+  );
 }

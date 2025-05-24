@@ -3,6 +3,11 @@ import React from 'react';
 const DeleteUserModal = ({ isOpen, onClose, onDelete, user }) => {
     if (!isOpen || !user) return null;
 
+    const handleDelete = () => {
+        onDelete(user.id);
+        onClose();
+    };
+
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 w-full max-w-md text-black">
@@ -13,10 +18,7 @@ const DeleteUserModal = ({ isOpen, onClose, onDelete, user }) => {
                 <div className="flex justify-center gap-4">
                     <button onClick={onClose} className="px-4 py-2 bg-gray-300 rounded">Cancel</button>
                     <button
-                        onClick={() => {
-                            onDelete(user.id);
-                            onClose();
-                        }}
+                        onClick={handleDelete}
                         className="px-4 py-2 bg-red-600 text-white rounded"
                     >
                         Delete

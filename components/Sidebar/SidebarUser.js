@@ -1,41 +1,33 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 
 export default function SidebarUser({ user }) {
   return (
-    <div className="flex h-screen bg-gray-900 text-yellow-300 flex-col w-64 p-6">
-      <div className="flex items-center mb-6">
-        <Image
-          src="/img/habal.jpg"
-          alt="User Avatar"
-          width={40}
-          height={40}
-          className="rounded-full mr-3"
-        />
-        <div className="font-bold text-lg">{user?.name || 'User Name'}</div>
+    <aside className="bg-gray-800 text-yellow-300 w-64 min-h-screen p-6">
+      <div className="mb-8">
+        <h2 className="text-xl font-bold">Welcome, {user.name}</h2>
       </div>
-      <nav className="flex flex-col space-y-4 flex-grow">
-        <Link href="/user/dashboard/borrowed-books" className="flex items-center hover:text-yellow-500">
-          <i className="bx bx-book-reader mr-3"></i>
+      <nav className="flex flex-col space-y-4">
+        <Link href="/user/dashboard" className="hover:text-yellow-500">
+          Dashboard
+        </Link>
+        <Link href="/user/dashboard/borrowed-books" className="hover:text-yellow-500">
           Borrowed Books
         </Link>
-        <Link href="/user/dashboard/due-dates" className="flex items-center hover:text-yellow-500">
-          <i className="bx bx-time-five mr-3"></i>
-          Due Dates
-        </Link>
-        <Link href="/user/dashboard/books-availability" className="flex items-center hover:text-yellow-500">
-          <i className="bx bx-book mr-3"></i>
+        <Link href="/user/dashboard/books-availability" className="hover:text-yellow-500">
           Books Availability
         </Link>
-        <button
-          onClick={() => window.location.href = '/'}
-          className="mt-auto px-4 py-2 bg-red-700 rounded hover:bg-red-800 text-white font-semibold"
-        >
-          Log Out
-        </button>
+        <Link href="/user/dashboard/due-dates" className="hover:text-yellow-500">
+          Due Dates
+        </Link>
+        <Link href="/user/page" className="hover:text-yellow-500">
+          Profile
+        </Link>
+        <Link href="/" className="hover:text-yellow-500">
+          Logout
+        </Link>
       </nav>
-    </div>
+    </aside>
   );
 }

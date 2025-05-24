@@ -1,39 +1,42 @@
-'use client';
-
 import React from 'react';
 
-export default function ViewUserModal({ user, onClose }) {
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg p-6 max-w-md w-full shadow-lg">
-        <h2 className="text-xl font-bold text-gray-800 mb-4">User Details</h2>
-        {user ? (
-          <div className="text-gray-700 space-y-2">
-            <p><strong>ID:</strong> {user.id}</p>
-            <p><strong>Name:</strong> {user.name}</p>
-            <p><strong>Email:</strong> {user.email}</p>
-            <p><strong>Role:</strong> {user.role || 'N/A'}</p>
-            <p><strong>Joined:</strong> {user.joined || 'N/A'}</p>
-            <p>
-              <strong>Status:</strong>{' '}
-              <span className={user.status === 'Active' ? 'text-green-600' : 'text-red-600'}>
-                {user.status}
-              </span>
-            </p>
-          </div>
-        ) : (
-          <p className="text-red-600">No user data available.</p>
-        )}
+const ViewUserModal = ({ isOpen, onClose, user }) => {
+    if (!isOpen || !user) return null;
 
-        <div className="mt-6 flex justify-end">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            Close
-          </button>
+    return (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 w-full max-w-md text-black">
+                <h2 className="text-xl font-semibold mb-4 text-center">User Details</h2>
+                <div className="space-y-2">
+                    <div>
+                        <span className="font-semibold text-gray-700">Name: </span>
+                        <span className="text-gray-900">{user.name}</span>
+                    </div>
+                    <div>
+                        <span className="font-semibold text-gray-700">Email: </span>
+                        <span className="text-gray-900">{user.email}</span>
+                    </div>
+                    <div>
+                        <span className="font-semibold text-gray-700">Role: </span>
+                        <span className="text-gray-900">{user.role}</span>
+                    </div>
+                    <div>
+                        <span className="font-semibold text-gray-700">Joined: </span>
+                        <span className="text-gray-900">{user.joined}</span>
+                    </div>
+                    <div>
+                        <span className="font-semibold text-gray-700">Status: </span>
+                        <span className={`font-bold ${user.status === 'Active' ? 'text-green-500' : 'text-red-500'}`}>
+                            {user.status}
+                        </span>
+                    </div>
+                </div>
+                <div className="flex justify-end mt-4">
+                    <button onClick={onClose} className="px-4 py-2 bg-gray-300 rounded">Close</button>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
-}
+    );
+};
+
+export default ViewUserModal;

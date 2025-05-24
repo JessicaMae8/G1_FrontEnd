@@ -3,9 +3,8 @@ import './globals.css';
 import Script from 'next/script';
 import { Suspense } from 'react';
 import Head from 'next/head';
-// import Navbar from '../components/Navbar/Navbar';
-// import Sidebar from '../components/Sidebar/Sidebar';
-// import Dashboard from '../components/Dashboard/Dashboard';
+import { BorrowProvider } from '../context/BorrowContext';
+import { AuthProvider } from '../context/AuthContext';
 
 export default function RootLayout({ children, }) {
   return (
@@ -21,7 +20,11 @@ export default function RootLayout({ children, }) {
         </Suspense>
         {/* <Sidebar />
           <Dashboard /> */}
-        {children}
+        <AuthProvider>
+          <BorrowProvider>
+            {children}
+          </BorrowProvider>
+        </AuthProvider>
       </body>
     </html>
   );
